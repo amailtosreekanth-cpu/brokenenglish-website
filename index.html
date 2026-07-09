@@ -69,8 +69,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .nav-links a:hover{color:#fff}
 .cta-btn{display:inline-flex;align-items:center;gap:10px;background:var(--grad);color:#fff;border:none;padding:13px 26px;border-radius:40px;font-family:var(--lab);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;transition:transform .25s,box-shadow .25s}
 .cta-btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(255,75,43,.4)}
-@media(max-width:960px){.nav-links{display:none}}
-@media(max-width:960px),(pointer:coarse){.portrait,.stat,.way,.switch-wrap,.step,.prog{backdrop-filter:none!important}}
+@media(max-width:680px){.nav-links{display:none}}
+@media(max-width:1024px),(pointer:coarse){.portrait,.stat,.way,.switch-wrap,.step,.prog{backdrop-filter:none!important}}
 
 /* ═══════════ THE WORLD — Z-axis fly-through ═══════════ */
 #depth-track{height:1250vh}
@@ -235,17 +235,38 @@ body.glitching .glitch::after{opacity:.9;color:var(--orange);-webkit-text-stroke
   *{animation-duration:.001s!important;transition-duration:.001s!important}
 }
 
-@media(max-width:960px){
-  #world-viewport{perspective:760px}
-  .s0-grid,.m-grid,.f-grid{grid-template-columns:1fr;gap:26px}
-  .portrait img{max-width:300px}
+/* -- TABLET (681px-1024px): portrait iPads, Android tablets -- */
+@media(min-width:681px) and (max-width:1024px){
+  #world-viewport{perspective:1000px}
+  .s0-grid{grid-template-columns:1.1fr .9fr;gap:24px}
+  .m-grid,.f-grid{grid-template-columns:1fr;gap:28px}
+  .hero-figure img{max-width:380px}
+  #s0{width:90vw}
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .ways{grid-template-columns:1fr 1fr}
+  .prog-grid{grid-template-columns:1fr 1fr}
+  .station{width:88vw;max-height:88vh;overflow-y:auto;padding:16px}
+  .monument span{font-size:34vw;transform:scale(0.375)}
+}
+/* -- PHONE (<=680px) -- */
+@media(max-width:680px){
+  #world-viewport{perspective:700px}
+  .s0-grid,.m-grid,.f-grid{grid-template-columns:1fr;gap:22px}
+  .portrait img{max-width:280px}
   .hero-figure{justify-content:center}
-  .hero-figure img{max-width:320px}
+  .hero-figure img{max-width:300px}
   #s0{width:92vw}
   .stats{grid-template-columns:1fr}
   .ways,.prog-grid{grid-template-columns:1fr}
   .station{width:92vw;max-height:86vh;overflow-y:auto;padding:10px}
   .monument span{font-size:58vw;transform:scale(0.375)}
+  .h-main,.h-title{word-break:break-word}
+}
+/* -- VERY SMALL PHONES (<=380px) -- */
+@media(max-width:380px){
+  .eyebrow{font-size:10px}
+  .cta-btn,.ghost-btn{padding:11px 20px;font-size:12px}
+  h2{font-size:clamp(24px,7vw,34px)}
 }
 </style>
 </head>
@@ -600,8 +621,9 @@ if(!reduced){
         // ONE-DIRECTIONAL DOF: only upcoming pages (deeper, d<0) blur; approaching eases to sharp; passed pages stay sharp.
         if(d < -220){ blur = 11*smoothstep(-220,-1500,d); }
       }
+      const blurOut=isTouch?blur*0.55:blur;
       st.el.style.opacity=o;
-      st.el.style.filter=(!isTouch&&blur>0.25)?'blur('+blur.toFixed(2)+'px)':'none';
+      st.el.style.filter=blurOut>0.25?'blur('+blurOut.toFixed(2)+'px)':'none';
       const live=o>.42;
       if(live!==st.live){st.live=live;st.el.classList.toggle('live',live);}
       if(o>.5&&d>-1400)armStation(st);
