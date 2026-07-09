@@ -82,8 +82,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:cent
 .monument{position:absolute;left:50%;top:50%;transform-style:preserve-3d;pointer-events:none;opacity:0;will-change:opacity}
 .monument{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;backface-visibility:hidden}
 .monument span{display:block;font-family:var(--disp);font-weight:900;font-size:clamp(240px,30vw,480px);line-height:1;white-space:nowrap;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.16);letter-spacing:.02em;transform:scale(0.375);transform-origin:center center}
-.monument.mL span{transform:rotateY(64deg)}
-.monument.mR span{transform:rotateY(-64deg)}
+.monument.mL span{transform:scale(0.375) rotateY(64deg)}
+.monument.mR span{transform:scale(0.375) rotateY(-64deg)}
 
 /* fly-hint */
 #flyHint{position:fixed;z-index:5;bottom:30px;left:50%;transform:translateX(-50%);font-family:var(--lab);font-weight:600;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--dim);transition:opacity .6s;display:flex;align-items:center;gap:12px}
