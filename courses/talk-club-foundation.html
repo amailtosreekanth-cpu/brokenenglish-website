@@ -37,9 +37,8 @@ a{color:inherit;text-decoration:none}
 /* nav */
 nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
 gap:16px;height:70px;background:rgba(5,5,5,.72);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.logo{font-family:var(--disp);font-weight:900;font-size:19px;letter-spacing:.02em;line-height:1;display:flex;flex-direction:column}
-.logo .k{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.logo small{font-size:9.5px;letter-spacing:.42em;color:var(--mute);font-weight:800;margin-top:2px}
+.logo{display:block;line-height:0}
+.logo img{height:34px;width:auto;display:block}
 .cta-btn{display:inline-flex;align-items:center;gap:9px;background:var(--grad);color:#fff;border:none;
 padding:12px 24px;border-radius:40px;font-family:var(--lab);font-weight:600;font-size:12.5px;
 letter-spacing:.06em;transition:transform .25s,box-shadow .25s}
@@ -99,9 +98,7 @@ nav .cta-btn{display:none}
 <body>
 <nav class="wrap-nav">
   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
-    <a class="logo" href="/" aria-label="Broken English home">
-      <span>BRO<span class="k">K</span>EN</span><small>ENGLISH</small>
-    </a>
+    <a class="logo" href="/" aria-label="Broken English home"><img src="/assets/logo.png" alt="Broken English" width="663" height="240"></a>
     <div style="display:flex;align-items:center;gap:22px;">
       <a class="back" href="/">&larr; All programs</a>
       <a class="cta-btn" href="https://wa.me/918891812970?text=Hi%2C%20I%20want%20to%20book%20a%20free%20assessment%20call" target="_blank" rel="noopener">Book Free Call</a>
