@@ -10,7 +10,7 @@
 //   Value: (the key Xale gave you)
 // ─────────────────────────────────────────────────────────────
 
-const XALE_WEBHOOK = "https://api.xale.in/api/v1/webhooks/website/576/900";
+const XALE_WEBHOOK = "https://api.xale.in/api/v1/webhooks/website/511/901";
 
 // Origins allowed to submit the form:
 const ALLOWED = [

@@ -299,6 +299,9 @@ body.lowfx .switch-wrap,body.lowfx .step,body.lowfx .prog{backdrop-filter:none!i
 /* ── LEAD MODAL ── */
 .lead-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);backdrop-filter:blur(6px)}
 .lead-ov[hidden]{display:none}
+.lead-ov,.lead-ov *{cursor:auto!important}
+.lead-ov input,.lead-ov textarea{cursor:text!important}
+.lead-ov button,.lead-ov select,.lead-ov a,.lead-x{cursor:pointer!important}
 .lead-box{position:relative;width:100%;max-width:440px;background:#0b0b0c;border:1px solid var(--line2);border-radius:22px;padding:34px 30px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .lead-box::before{content:'';position:absolute;inset:0;padding:1px;border-radius:22px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.5}
 .lead-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--mute);font-size:26px;line-height:1;cursor:pointer}
@@ -718,18 +721,27 @@ if(!FLAT){
 }
 
 /* nav → fly to station */
+function goToStation(i){
+  const st=stations[i]; if(!st)return;
+  if(FLAT){ st.el.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  const total=track.offsetHeight-innerHeight;
+  const FARZ2=Math.min.apply(null,stations.map(s=>s.z));
+  const targetP=(-st.z)/(-FARZ2+140);
+  scrollTo({top:targetP*total,behavior:'smooth'});
+}
 document.querySelectorAll('[data-goto]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    e.preventDefault();
-    const i=parseInt(a.dataset.goto);
-    const st=stations[i]; if(!st)return;
-    if(FLAT){ st.el.scrollIntoView({behavior:'smooth',block:'center'}); return; }
-    const total=track.offsetHeight-innerHeight;
-    const FARZ2=Math.min.apply(null,stations.map(s=>s.z));
-    const targetP=(-st.z)/(-FARZ2+140);
-    scrollTo({top:targetP*total,behavior:'smooth'});
-  });
+  a.addEventListener('click',e=>{ e.preventDefault(); goToStation(parseInt(a.dataset.goto)); });
 });
+/* deep-link: /#s6 (or any #station-id) flies there — used by course pages "All programs" */
+function hashToStation(){
+  const h=location.hash; if(!h)return;
+  let el=null; try{ el=document.querySelector(h); }catch(_){ }
+  if(!el||!el.classList.contains('station'))return;
+  const i=stations.findIndex(s=>s.el===el);
+  if(i>=0) setTimeout(()=>goToStation(i), FLAT?250:550);
+}
+addEventListener('load',hashToStation);
+addEventListener('hashchange',hashToStation);
 
 /* ── THE IDENTITY SWITCH ── */
 const swWrap=document.getElementById('switchWrap');

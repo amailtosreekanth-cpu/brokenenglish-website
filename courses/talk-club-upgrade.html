@@ -97,6 +97,33 @@ footer a:hover{color:#fff}
 .inside ul{grid-template-columns:1fr}
 nav .cta-btn{display:none}
 }
+
+/* ── LEAD MODAL ── */
+.lead-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.72);backdrop-filter:blur(6px)}
+.lead-ov[hidden]{display:none}
+.lead-ov,.lead-ov *{cursor:auto}
+.lead-ov input,.lead-ov textarea{cursor:text}
+.lead-ov button,.lead-ov select,.lead-ov a,.lead-x{cursor:pointer}
+.lead-box{position:relative;width:100%;max-width:440px;background:#0b0b0c;border:1px solid var(--line2);border-radius:22px;padding:34px 30px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.lead-box::before{content:'';position:absolute;inset:0;padding:1px;border-radius:22px;background:var(--grad);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.5}
+.lead-x{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--mute);font-size:26px;line-height:1}
+.lead-x:hover{color:#fff}
+.lead-box .eyebrow{margin-bottom:8px}
+.lead-h{font-family:var(--disp);font-weight:800;font-size:24px;margin:2px 0 6px}
+.lead-sub{color:var(--mute);font-size:14px;margin-bottom:20px}
+.lead-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0}
+#lead-form label{display:block;font-family:var(--lab);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+#lead-form input,#lead-form select{width:100%;margin-top:7px;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:12px;padding:13px 14px;color:#fff;font-family:var(--body);font-size:15px;font-weight:400;letter-spacing:normal;text-transform:none}
+#lead-form input:focus,#lead-form select:focus{outline:none;border-color:var(--orange)}
+#lead-form select{appearance:none;-webkit-appearance:none}
+#lead-form option{background:#0b0b0c}
+.lead-submit{width:100%;justify-content:center;margin-top:6px;border:none}
+.lead-submit:disabled{opacity:.6}
+.lead-msg{margin-top:14px;font-size:13.5px;min-height:1em;line-height:1.4}
+.lead-msg.ok{color:#7CFC9A}
+.lead-msg.err{color:#ff8c6b}
+.lead-msg a{color:var(--orange);text-decoration:underline}
+
 </style>
 </head>
 <body>
@@ -104,8 +131,8 @@ nav .cta-btn{display:none}
   <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;width:100%;">
     <a class="logo" href="/" aria-label="Broken English home"><img src="/assets/logo.png" alt="Broken English" width="663" height="240"></a>
     <div style="display:flex;align-items:center;gap:22px;">
-      <a class="back" href="/">&larr; All programs</a>
-      <a class="cta-btn" href="https://wa.me/918891812970?text=Hi%2C%20I%20want%20to%20book%20a%20free%20assessment%20call" target="_blank" rel="noopener">Book Free Call</a>
+      <a class="back" href="/#s6">&larr; All programs</a>
+      <a class="cta-btn" data-book href="https://wa.me/918891812970?text=Hi%2C%20I%20want%20to%20book%20a%20free%20assessment%20call" target="_blank" rel="noopener">Book Free Call</a>
     </div>
   </div>
 </nav>
@@ -175,5 +202,54 @@ nav .cta-btn{display:none}
   <a href="mailto:info@brokenenglish.in">info@brokenenglish.in</a>
   <a href="/">brokenenglish.in</a>
 </div></footer>
+
+<div id="lead-modal" class="lead-ov" hidden>
+  <div class="lead-box" role="dialog" aria-modal="true" aria-labelledby="lead-h">
+    <button class="lead-x" id="lead-close" type="button" aria-label="Close">&times;</button>
+    <div class="eyebrow">Free Assessment</div>
+    <h3 class="lead-h" id="lead-h">Book your free call</h3>
+    <p class="lead-sub">Leave your number and a Broken English counsellor will call you back. Free &middot; No commitment.</p>
+    <form id="lead-form" novalidate>
+      <input type="text" name="company" class="lead-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label>Your name<input type="text" name="name" required autocomplete="name" placeholder="e.g. Arjun"></label>
+      <label>Mobile number<input type="tel" name="mobile" required inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile"></label>
+      <label>Which program?<select name="program"><option value="Not sure yet">Not sure yet &mdash; help me choose</option><option>Spoken English Foundation</option><option>Talk Club Foundation</option><option selected>Talk Club Upgrade</option><option>Talk Club Elite</option><option>Spoken English Elite</option><option>MTI Reduction &amp; Accent Neutralisation</option></select></label>
+      <button type="submit" class="cta-btn lead-submit">Request my free call</button>
+      <p class="lead-msg" id="lead-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  var EP='https://lively-sun-211f.academicsbrk.workers.dev/';
+  var ov=document.getElementById('lead-modal'); if(!ov) return;
+  var form=document.getElementById('lead-form');
+  var msg=document.getElementById('lead-msg');
+  var closeBtn=document.getElementById('lead-close');
+  var q=function(n){return form.querySelector('[name="'+n+'"]');};
+  var lastFocus=null;
+  function open(e){ if(e) e.preventDefault(); lastFocus=document.activeElement; ov.hidden=false; document.body.style.overflow='hidden'; setTimeout(function(){q('name').focus();},40); }
+  function shut(){ ov.hidden=true; document.body.style.overflow=''; msg.textContent=''; msg.className='lead-msg'; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-book]'), function(b){ b.addEventListener('click', open); });
+  closeBtn.addEventListener('click', shut);
+  ov.addEventListener('click', function(e){ if(e.target===ov) shut(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !ov.hidden) shut(); });
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name=q('name').value.trim();
+    var mobile=q('mobile').value.trim();
+    if(!name || mobile.replace(/\D/g,'').length<10){ msg.className='lead-msg err'; msg.textContent='Please enter your name and a valid 10-digit mobile number.'; return; }
+    var btn=form.querySelector('.lead-submit'); var old=btn.textContent;
+    btn.disabled=true; btn.textContent='Sending\u2026'; msg.className='lead-msg'; msg.textContent='';
+    fetch(EP,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({name:name,mobile:mobile,program:q('program').value,source:'Website',company:q('company').value})})
+    .then(function(r){ return r.json().catch(function(){return {};}).then(function(j){ return {ok:r.ok&&j.ok}; }); })
+    .then(function(res){ if(res.ok){ form.reset(); msg.className='lead-msg ok'; msg.innerHTML='\u2713 Got it! A counsellor will call you shortly.'; } else { throw new Error('fail'); } })
+    .catch(function(){ msg.className='lead-msg err'; msg.innerHTML='Something went wrong. WhatsApp us directly: <a href="https://wa.me/918891812970" target="_blank" rel="noopener">+91 88918 12970</a>'; })
+    .then(function(){ btn.disabled=false; btn.textContent=old; });
+  });
+})();
+</script>
 </body>
 </html>
